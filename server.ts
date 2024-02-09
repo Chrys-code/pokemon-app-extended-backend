@@ -13,11 +13,15 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 8080;
 
+// Connect to database
 connectToDB();
+
+// Set up middlewares
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
+// Connect routes
 app.use("/auth", authRoute);
 app.use("/pokemons", pokemonsRoute);
 

@@ -6,8 +6,8 @@ const { releasePokemon, catchPokemon, listPokemons } = require("../../controller
 // const { collectionSchemaValidator } = require("../../middleware/validator.middleware");
 // const verifyToken = require("../../middleware/auth.middleware");
 
-router.post("/release", releasePokemon);
-router.post("/catch", catchPokemon);
-router.get("/list/:id", listPokemons);
+router.post("/release", /**verifyToken, */ releasePokemon);
+router.post("/catch", /**verifyToken, */ catchPokemon);
+router.get("/list/:id", /**verifyToken, */ listPokemons);
 
 module.exports = router;
