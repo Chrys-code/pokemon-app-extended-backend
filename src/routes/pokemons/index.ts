@@ -8,6 +8,6 @@ const { releasePokemon, catchPokemon, listPokemons } = require("../../controller
 
 router.post("/release", releasePokemon);
 router.post("/catch", catchPokemon);
-router.post("/list", listPokemons);
+router.get("/list/:id", listPokemons);
 
 module.exports = router;

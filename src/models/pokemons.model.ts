@@ -3,7 +3,7 @@ import { Schema, Types, model } from 'mongoose';
 export interface Pokemons {
     _id?: Types.ObjectId,
     userId: Types.ObjectId,
-    pokemons: string[],
+    pokemons: { id: string }[],
 }
 
 const pokemonsSchema = new Schema<Pokemons>({
@@ -13,7 +13,7 @@ const pokemonsSchema = new Schema<Pokemons>({
         required: true,
     },
     pokemons: {
-        type: [String],
+        type: [{ id: { type: String } }],
         required: false,
     }
 });
