@@ -33,8 +33,10 @@ const register = asyncHandler(async (req: Request, res: Response) => {
                         .then((response: User) => {
                             return res.status(201).json({
                                 message: 'user created!',
-                                result: response,
-                                success: true
+                                user: {
+                                    id: response._id,
+                                    email: response.email
+                                },
                             })
                         })
                         .catch((err: any) => {
@@ -70,6 +72,9 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 
     try {
         // Check if pw is matching
+
+        // IMPORTANT
+        // Looks like this can be given any password....
         const matchPassword: boolean = bcrypt.compare(password, dbUser.password);
 
         if (matchPassword) {

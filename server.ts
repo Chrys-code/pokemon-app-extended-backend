@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 const cors = require("cors");
 const connectToDB = require("./src/config/db_config");
 
-const userRoute = require("./src/routes/user");
+const authRoute = require("./src/routes/auth");
 const pokemonsRoute = require("./src/routes/pokemons");
 
 dotenv.config();
@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/user", userRoute);
+app.use("/auth", authRoute);
 app.use("/pokemons", pokemonsRoute);
 
 app.get("/ping", (req: Request, res: Response) => {
