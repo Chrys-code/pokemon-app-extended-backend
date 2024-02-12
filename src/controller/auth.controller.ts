@@ -4,6 +4,7 @@ import { User } from "../models/user.model";
 const asyncHandler = require("express-async-handler");
 const bcrypt = require('bcryptjs');
 const userModel = require("../models/user.model");
+const jwt = require('jsonwebtoken');
 
 
 const register = asyncHandler(async (req: Request, res: Response) => {
@@ -21,9 +22,9 @@ const register = asyncHandler(async (req: Request, res: Response) => {
         } else {
 
             // Hash PW & Save user model
-            bcrypt.hash(password, 10)
+            await bcrypt.hash(password, 10)
                 .then((hash: string) => {
-                    const user = new userModel({
+                    const user: User = new userModel({
                         email: email,
                         password: hash,
                     });
@@ -31,6 +32,21 @@ const register = asyncHandler(async (req: Request, res: Response) => {
                     // Save User
                     user.save()
                         .then((response: User) => {
+
+                            let jwtToken = jwt.sign(
+                                {
+                                    email: user.email,
+                                    userId: user._id
+                                },
+                                process.env.JWT_SECRET,
+                                {
+                                    expiresIn: "1h"
+                                }
+                            )
+
+
+                            res.cookie("Authorization", `${jwtToken}`);
+
                             return res.status(201).json({
                                 message: 'user created!',
                                 user: {
@@ -73,22 +89,36 @@ const login = asyncHandler(async (req: Request, res: Response) => {
     try {
         // Check if pw is matching
 
-        // IMPORTANT
-        // Looks like this can be given any password....
-        const matchPassword: boolean = bcrypt.compare(password, dbUser.password);
+        const matchPassword: boolean = await bcrypt.compare(password, dbUser.password);
 
         if (matchPassword) {
             // TO DO
             // Sign JWT Token with email & pw
 
+            let jwtToken = jwt.sign(
+                {
+                    email: dbUser.email,
+                    userId: dbUser._id
+                },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: "1h"
+                }
+            )
+
+            res.cookie("Authorization", `${jwtToken}`);
+
             return res.status(200).json({
-                accessToken: "",
                 user: {
                     id: dbUser._id,
                     email: dbUser.email
                 },
             })
         }
+
+        return res.status(401).json({
+            message: "password not matching"
+        })
 
     } catch (err: any) {
         return res.status(500).json({

@@ -1,0 +1,396 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a smaple project of creating api endpoint for a pokemon app. It consists basic functionalities such as register, login, logout, listing pokemons for the user, expanding collection and releasing pokemons. The pokemon collection endpoint are portected endpoints.",
+        "version": "1.0.0",
+        "title": "Pokemon api",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "apiteam@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "basePath": "/",
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "summary": "",
+                "description": "Allows the user to sign up for the applciation using email & password where the password will be saved in a hashed version. It can also log in the user right after registration.",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "name",
+                                "email"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "example@example.com"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "123-asd-123-asd"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "_id": {
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "example": "123-asd-123-asd"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "example@example.com"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "412": {
+                        "description": "Server Error",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "summary": "",
+                "description": "Allows the user to login for the applciation using email & password where the password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "name",
+                                "email"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "example@example.com"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "123-asd-123-asd"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Logged in",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "_id": {
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "example": "123-asd-123-asd"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "example@example.com"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Existing user or email is in use",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Authentication Failed or password not matching"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "pokemon/list/:id": {
+            "get": {
+                "summary": "",
+                "description": "Protected endpoint allows users to list their pokemons. It requires userId in the query string",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "id"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get pokemon collection",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": "true"
+                                },
+                                "pokemons": {
+                                    "type": "array",
+                                    "example": [
+                                        {
+                                            "_id": "123-asd-123",
+                                            "id": "pokemons id",
+                                            "name": "pokemon name",
+                                            "url": "accessUrl"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No collection found. User has not yet collected any pokemons.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": "false"
+                                },
+                                "message": {
+                                    "type": "boolean",
+                                    "example": "Could not find collection for user"
+                                },
+                                "pokemons": {
+                                    "type": "array",
+                                    "example": []
+                                }
+                            }
+                        }
+                    },
+                    "412": {
+                        "description": "Server Error",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "pokemon/catch": {
+            "post": {
+                "summary": "",
+                "description": "Protected endpoint. Allows users to expand their pokemon collection. ",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "id",
+                                "name",
+                                "url"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "example": "pokemonId"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "pokemon name"
+                                },
+                                "url": {
+                                    "type": "string",
+                                    "example": "pokemon access url"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get pokemon collection",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": "true"
+                                },
+                                "pokemons": {
+                                    "type": "array",
+                                    "example": [
+                                        {
+                                            "_id": "123-asd-123",
+                                            "id": "pokemons id",
+                                            "name": "pokemon name",
+                                            "url": "accessUrl"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "412": {
+                        "description": "Server Error",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "pokemon/release": {
+            "post": {
+                "summary": "",
+                "description": "Protected endpoint. Allows users to remove pokemons from their collection. ",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "id"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "example": "pokemonId"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get pokemon collection",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": "true"
+                                },
+                                "pokemons": {
+                                    "type": "array",
+                                    "example": [
+                                        {
+                                            "_id": "123-asd-123",
+                                            "id": "pokemons id",
+                                            "name": "pokemon name",
+                                            "url": "accessUrl"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No collection found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "No collection found!"
+                                }
+                            }
+                        }
+                    },
+                    "412": {
+                        "description": "Server Error",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

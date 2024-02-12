@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Pokemons } from "../models/pokemons.model";
 
 const asyncHandler = require("express-async-handler");
 const PokemonsModel = require("../models/pokemons.model");
@@ -11,20 +12,20 @@ const listPokemons = asyncHandler(async (req: Request, res: Response) => {
 
     try {
         // Get the collection for user
-        const collection = await PokemonsModel.findOne({ userId: id });
+        const pokemonsCollection: Pokemons = await PokemonsModel.findOne({ userId: id });
 
         // If non found send empty array
-        if (!collection) {
+        if (!pokemonsCollection) {
             return res.status(404).send({
                 success: false,
                 message: "Could not find collection for user",
-                collection: []
+                pokemons: []
             })
         }
 
         return res.status(200).send({
             success: true,
-            collection: collection
+            pokemons: pokemonsCollection.pokemons
         })
     }
     catch (err: any) {
@@ -41,19 +42,19 @@ const catchPokemon = asyncHandler(async (req: Request, res: Response) => {
 
     // Get data
     // Should grab the user ID from decoded Token in req.user generated from middleware
-    const { userId, pokemonId } = req.body;
+    const { userId, pokemon } = req.body;
 
     try {
         // Get the collection for user
-        const pokemonsCollection = await PokemonsModel.findOneAndUpdate(
+        const pokemonsCollection: Pokemons = await PokemonsModel.findOneAndUpdate(
             { userId: userId },
-            { $push: { pokemons: { id: pokemonId } } },
+            { $push: { pokemons: pokemon } },
             { new: true, upsert: true }
         );
 
         return res.status(200).send({
             success: true,
-            pokemons: pokemonsCollection
+            pokemons: pokemonsCollection.pokemons
         })
     }
     catch (err: any) {
@@ -74,7 +75,7 @@ const releasePokemon = asyncHandler(async (req: Request, res: Response) => {
     try {
 
         // Remove pokemon from collection
-        const pokemonsCollection = await PokemonsModel.findOneAndUpdate(
+        const pokemonsCollection: Pokemons = await PokemonsModel.findOneAndUpdate(
             { userId: userId },
             { $pull: { pokemons: { id: pokemonId } } },
             { new: true, upsert: true }
@@ -82,7 +83,7 @@ const releasePokemon = asyncHandler(async (req: Request, res: Response) => {
 
         // If non found
         if (!pokemonsCollection) {
-            return res.status(200).send({
+            return res.status(404).send({
                 success: true,
                 message: "No collection found!"
             })
@@ -90,7 +91,7 @@ const releasePokemon = asyncHandler(async (req: Request, res: Response) => {
 
         return res.status(200).send({
             success: true,
-            pokemons: pokemonsCollection
+            pokemons: pokemonsCollection.pokemons
         })
     }
     catch (err: any) {

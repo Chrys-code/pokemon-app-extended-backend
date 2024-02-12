@@ -1,6 +1,6 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, Types, model, Document } from 'mongoose';
 
-export interface Pokemons {
+export interface Pokemons extends Document {
     _id?: Types.ObjectId,
     userId: Types.ObjectId,
     pokemons: { id: string }[],
@@ -13,7 +13,11 @@ const pokemonsSchema = new Schema<Pokemons>({
         required: true,
     },
     pokemons: {
-        type: [{ id: { type: String } }],
+        type: [{
+            id: { type: String, required: true },
+            url: { type: String, required: true },
+            name: { type: String, required: true }
+        }],
         required: false,
     }
 });
