@@ -14,6 +14,7 @@
 
 ## Start
 
+- set .env based on env.example
 - npm i
 - npm run dev
 
