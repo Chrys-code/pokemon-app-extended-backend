@@ -10,6 +10,7 @@
 - Mongoose (ORM librarly)
 - MongoDB (Database)
 - Typescript
+- SwaggerUI
 
 ## Start
 
@@ -24,7 +25,7 @@ Auth:
 - Login
 - Register
 
-Pokemons:
+Pokemons: (protected)
 - Catch
 - Release
 - List
@@ -45,6 +46,4 @@ I would also consider using Python-FastAPI. Perfect for I/O communication and de
 
 Please note that the application is not finished and requires more work.
 
-- Middleware for handling JWT tokens is created, however, it was not added to the routes to make Front-End development faster, then close up the protected routes later.
-
-- There is an important flaw in the application, that is the fact that upon register the front-end application logs you in automatically, but no JWT is issued.
+This applicataion was not developed under 8 but 14 hours so far instead.
