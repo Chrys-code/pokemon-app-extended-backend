@@ -6,15 +6,11 @@ const PokemonsModel = require("../models/pokemons.model");
 
 const listPokemons = asyncHandler(async (req: Request, res: Response) => {
 
-    // Get data
-    // Should grab the user ID from decoded Token in req.user generated from middleware
-    const { id } = req.params;
+    const { userId } = res.locals;
 
     try {
-        // Get the collection for user
-        const pokemonsCollection: Pokemons = await PokemonsModel.findOne({ userId: id });
+        const pokemonsCollection: Pokemons = await PokemonsModel.findOne({ userId });
 
-        // If non found send empty array
         if (!pokemonsCollection) {
             return res.status(404).send({
                 success: false,
@@ -29,7 +25,7 @@ const listPokemons = asyncHandler(async (req: Request, res: Response) => {
         })
     }
     catch (err: any) {
-        return res.status(412).send({
+        return res.status(500).send({
             success: false,
             message: err.message
         })
@@ -37,15 +33,12 @@ const listPokemons = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
-
 const catchPokemon = asyncHandler(async (req: Request, res: Response) => {
 
-    // Get data
-    // Should grab the user ID from decoded Token in req.user generated from middleware
-    const { userId, pokemon } = req.body;
+    const { pokemon } = req.body;
+    const { userId } = res.locals;
 
     try {
-        // Get the collection for user
         const pokemonsCollection: Pokemons = await PokemonsModel.findOneAndUpdate(
             { userId: userId },
             { $push: { pokemons: pokemon } },
@@ -58,33 +51,28 @@ const catchPokemon = asyncHandler(async (req: Request, res: Response) => {
         })
     }
     catch (err: any) {
-        return res.status(412).send({
+        return res.status(500).send({
             success: false,
             message: err.message
         })
     }
-
 });
 
 const releasePokemon = asyncHandler(async (req: Request, res: Response) => {
 
-    // Get data
-    // Should grab the user ID from decoded Token in req.user generated from middleware
-    const { userId, pokemonId } = req.body;
+    const { pokemonId } = req.body;
+    const { userId } = res.locals;
 
     try {
-
-        // Remove pokemon from collection
         const pokemonsCollection: Pokemons = await PokemonsModel.findOneAndUpdate(
             { userId: userId },
             { $pull: { pokemons: { id: pokemonId } } },
             { new: true, upsert: true }
         );
 
-        // If non found
         if (!pokemonsCollection) {
             return res.status(404).send({
-                success: true,
+                success: false,
                 message: "No collection found!"
             })
         }
@@ -95,15 +83,13 @@ const releasePokemon = asyncHandler(async (req: Request, res: Response) => {
         })
     }
     catch (err: any) {
-        return res.status(412).send({
+        return res.status(500).send({
             success: false,
             message: err.message
         })
     }
 
 });
-
-
 
 module.exports = {
     releasePokemon,
