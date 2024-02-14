@@ -22,4 +22,4 @@ const pokemonsSchema = new Schema<Pokemons>({
     }
 });
 
-module.exports = model<Pokemons>('Pokemons', pokemonsSchema);
+export default model<Pokemons>('Pokemons', pokemonsSchema);

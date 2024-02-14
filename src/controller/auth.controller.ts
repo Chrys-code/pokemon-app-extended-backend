@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { User } from "../models/user.model";
+import userModel from "../models/user.model";
+import bcrypt from "bcryptjs";
+import ConfigManager from "../config/configManager";
 
 const asyncHandler = require("express-async-handler");
-const bcrypt = require('bcryptjs');
-const userModel = require("../models/user.model");
 const jwt = require('jsonwebtoken');
 
-const register = asyncHandler(async (req: Request, res: Response) => {
+export const register = asyncHandler(async (req: Request, res: Response) => {
 
     const { email, password } = req.body;
 
@@ -48,7 +49,7 @@ const register = asyncHandler(async (req: Request, res: Response) => {
                 email: dbUser.email,
                 userId: dbUser._id
             },
-            process.env.JWT_SECRET,
+            ConfigManager.JWT_SECRET,
             {
                 expiresIn: "1h"
             }
@@ -73,12 +74,12 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
-const login = asyncHandler(async (req: Request, res: Response) => {
+export const login = asyncHandler(async (req: Request, res: Response) => {
 
     const { email, password } = req.body;
 
     try {
-        const dbUser: User | undefined = await userModel.findOne({
+        const dbUser: User | null | undefined = await userModel.findOne({
             email: email,
         });
 
@@ -103,9 +104,9 @@ const login = asyncHandler(async (req: Request, res: Response) => {
                 email: dbUser.email,
                 userId: dbUser._id
             },
-            process.env.JWT_SECRET,
+            ConfigManager.JWT_SECRET,
             {
-                expiresIn: "1h"
+                expiresIn: "24h"
             }
         )
 
@@ -126,8 +127,3 @@ const login = asyncHandler(async (req: Request, res: Response) => {
         })
     }
 });
-
-module.exports = {
-    register,
-    login,
-}

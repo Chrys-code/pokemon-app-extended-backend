@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
 import { Request, Response, NextFunction } from "express";
+import ConfigManager from "../config/configManager";
 
-module.exports = (req: Request, res: Response, next: NextFunction) => {
+const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.headers.authorization?.replace("Bearer ", "");
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, ConfigManager.JWT_SECRET);
 
         const { userId } = decoded;
         res.locals.userId = userId;
@@ -16,3 +17,5 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
         });
     }
 };
+
+export default verifyToken;

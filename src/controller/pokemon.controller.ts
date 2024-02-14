@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { Pokemons } from "../models/pokemons.model";
+import PokemonsModel from "../models/pokemons.model";
 
 const asyncHandler = require("express-async-handler");
-const PokemonsModel = require("../models/pokemons.model");
 
-const listPokemons = asyncHandler(async (req: Request, res: Response) => {
+export const listPokemons = asyncHandler(async (req: Request, res: Response) => {
 
     const { userId } = res.locals;
 
     try {
-        const pokemonsCollection: Pokemons = await PokemonsModel.findOne({ userId });
+        const pokemonsCollection: Pokemons | null = await PokemonsModel.findOne({ userId });
 
         if (!pokemonsCollection) {
             return res.status(404).send({
@@ -33,7 +33,7 @@ const listPokemons = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
-const catchPokemon = asyncHandler(async (req: Request, res: Response) => {
+export const catchPokemon = asyncHandler(async (req: Request, res: Response) => {
 
     const { pokemon } = req.body;
     const { userId } = res.locals;
@@ -58,7 +58,7 @@ const catchPokemon = asyncHandler(async (req: Request, res: Response) => {
     }
 });
 
-const releasePokemon = asyncHandler(async (req: Request, res: Response) => {
+export const releasePokemon = asyncHandler(async (req: Request, res: Response) => {
 
     const { pokemonId } = req.body;
     const { userId } = res.locals;
@@ -90,9 +90,3 @@ const releasePokemon = asyncHandler(async (req: Request, res: Response) => {
     }
 
 });
-
-module.exports = {
-    releasePokemon,
-    listPokemons,
-    catchPokemon,
-}

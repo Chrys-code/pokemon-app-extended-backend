@@ -1,27 +1,23 @@
 import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
 import bodyParser from "body-parser";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from './swagger.json'
+import cors from 'cors';
+import connectToDB from './src/config/db_config';
 
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger.json");
-
-const cors = require("cors");
-const connectToDB = require("./src/config/db_config");
-
-const authRoute = require("./src/routes/auth");
-const pokemonsRoute = require("./src/routes/pokemons");
-
-dotenv.config();
+import authRoute from './src/routes/auth';
+import pokemonsRoute from './src/routes/pokemons';
+import ConfigManager from "./src/config/configManager";
 
 const app: Express = express();
-const port = process.env.PORT || 8080;
+const port = ConfigManager.PORT;
 
 // Connect to database
 connectToDB();
 
 const corsOptions = {
     credentials: true,
-    origin: process.env.ALLOW_ORIGIN
+    origin: ConfigManager.ALLOW_ORIGIN
 };
 
 
@@ -29,10 +25,10 @@ const corsOptions = {
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, { explorer: true }));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, { explorer: true }));
 
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', process.env.ALLOW_ORIGIN);
+    res.header('Access-Control-Allow-Origin', ConfigManager.ALLOW_ORIGIN);
     res.header('Access-Control-Allow-Headers', 'true');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');

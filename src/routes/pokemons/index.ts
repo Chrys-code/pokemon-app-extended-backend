@@ -1,11 +1,11 @@
-const express = require("express");
-const router = express.Router();
+import express from 'express';
+import { releasePokemon, catchPokemon, listPokemons } from '../../controller/pokemon.controller';
+import verifyToken from "../../middleware/auth.middleware";
 
-const { releasePokemon, catchPokemon, listPokemons } = require("../../controller/pokemons.controller");
-const verifyToken = require("../../middleware/auth.middleware");
+const router = express.Router();
 
 router.post("/release", verifyToken, releasePokemon);
 router.post("/catch", verifyToken, catchPokemon);
 router.get("/list", verifyToken, listPokemons);
 
-module.exports = router;
+export default router;
