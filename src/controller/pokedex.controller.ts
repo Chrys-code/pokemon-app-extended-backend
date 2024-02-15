@@ -39,15 +39,16 @@ export const getPokedex = asyncHandler(async (req: Request, res: Response) => {
 
 export const addToPokedex = asyncHandler(async (req: Request, res: Response) => {
 
-    const { pokemonId, name, url } = req.body;
+    const { pokemon } = req.body;
     const { userId } = res.locals;
+
 
     try {
 
-        let dbPokemon: Pokemon | null = await PokemonModel.findOne({ pokemonId });
+        let dbPokemon: Pokemon | null = await PokemonModel.findOne({ pokemonId: pokemon.pokemonId });
 
         if (!dbPokemon) {
-            const pokemonCopy: Pokemon = new PokemonModel({ pokemonId, name, url });
+            const pokemonCopy: Pokemon = new PokemonModel(pokemon);
             dbPokemon = await pokemonCopy.save();
         }
 
@@ -83,13 +84,13 @@ export const addToPokedex = asyncHandler(async (req: Request, res: Response) => 
 
 export const removeFromPokedex = asyncHandler(async (req: Request, res: Response) => {
 
-    const { pokemonId } = req.body;
+    const { id } = req.query;
     const { userId } = res.locals;
 
     try {
         const pokedex: Pokedex = await PokedexModel.findOneAndUpdate(
             { userId: userId },
-            { $pull: { pokemons: pokemonId } },
+            { $pull: { pokemons: id } },
             { new: true, upsert: true }
         );
 
