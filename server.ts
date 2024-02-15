@@ -6,7 +6,7 @@ import cors from 'cors';
 import connectToDB from './src/config/db_config';
 
 import authRoute from './src/routes/auth';
-import pokemonsRoute from './src/routes/pokemons';
+import pokedexRoute from './src/routes/pokedex';
 import ConfigManager from "./src/config/configManager";
 
 const app: Express = express();
@@ -38,7 +38,7 @@ app.use(function (req, res, next) {
 
 // Connect routes
 app.use("/auth", authRoute);
-app.use("/pokemons", pokemonsRoute);
+app.use("/pokedex", pokedexRoute);
 
 app.get("/ping", (req: Request, res: Response) => {
     res.send("alive!");

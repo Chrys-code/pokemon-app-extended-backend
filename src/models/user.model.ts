@@ -1,20 +1,29 @@
-import { Schema, Types, model, Document } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
-export interface User extends Document {
-    _id?: Types.ObjectId,
+export interface UserInput {
     email: string,
     password: string,
 }
 
-const userSchema = new Schema<User>({
-    email: {
-        type: String,
-        required: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-});
+export interface User extends UserInput, Document {
+    updatedAt: Date,
+    createdAt: Date,
+}
 
-export default model<User>('User', userSchema);
+const UserSchema = new Schema<User>(
+    {
+        email: {
+            type: String,
+            required: true,
+        },
+        password: {
+            type: String,
+            required: true,
+        },
+    },
+    {
+        timestamps: true,
+    }
+);
+
+export default model<User>('User', UserSchema);

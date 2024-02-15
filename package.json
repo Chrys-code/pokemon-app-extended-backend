@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "start": "node server.ts",
     "dev": "nodemon server.ts",
-    "test": "jest"
+    "test": "jest --coverage --forceExit --maxWorkers=1"
   },
   "author": "",
   "license": "ISC",
@@ -32,6 +32,7 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^20.11.16",
+    "@types/supertest": "^6.0.2",
     "@types/swagger-ui-express": "^4.1.6",
     "@types/validatorjs": "^3.15.5",
     "cors": "^2.8.5",

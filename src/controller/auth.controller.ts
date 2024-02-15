@@ -13,10 +13,11 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
 
     try {
 
-        const verifyEmail = await userModel.findOne({ email: email })
+        const verifyEmail: User | null = await userModel.findOne({ email: email })
 
         if (verifyEmail) {
             return res.status(403).json({
+                success: false,
                 message: "Email already in use!"
             })
         }
@@ -79,7 +80,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
-        const dbUser: User | null | undefined = await userModel.findOne({
+        const dbUser: User | null = await userModel.findOne({
             email: email,
         });
 
