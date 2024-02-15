@@ -59,7 +59,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
         res.cookie("Authorization", `${jwtToken}`);
 
         return res.status(201).json({
-            message: 'user created!',
+            success: true,
             user: {
                 id: dbUser._id,
                 email: dbUser.email
