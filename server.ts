@@ -7,6 +7,8 @@ import connectToDB from './src/config/db_config';
 
 import authRoute from './src/routes/auth';
 import pokedexRoute from './src/routes/pokedex';
+import pokemonRoute from './src/routes/pokemon';
+
 import ConfigManager from "./src/config/configManager";
 
 const app: Express = express();
@@ -31,7 +33,7 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', ConfigManager.ALLOW_ORIGIN);
     res.header('Access-Control-Allow-Headers', 'true');
     res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE');
     next();
 });
 
@@ -39,13 +41,14 @@ app.use(function (req, res, next) {
 // Connect routes
 app.use("/auth", authRoute);
 app.use("/pokedex", pokedexRoute);
+app.use("/pokemons", pokemonRoute);
 
 app.get("/ping", async (req: Request, res: Response) => {
     res.send("alive!");
 });
 
 app.listen(port, () => {
-    // console.log(`[server]: Server is running at http://localhost:${port}`);
+    console.log(`[server]: Server is running at http://localhost:${port}`);
 });
 
 
