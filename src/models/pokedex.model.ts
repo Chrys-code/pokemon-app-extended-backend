@@ -1,6 +1,6 @@
 import mongoose, { Schema, Types, model, Document } from 'mongoose';
 
-export type PokemonId = mongoose.Types.ObjectId;
+export type PokemonId = Number
 
 export interface PokedexInput {
     userId: Types.ObjectId,
@@ -21,8 +21,7 @@ const PokedexSchema = new Schema<Pokedex>(
             required: true,
         },
         pokemons: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Pokemon',
+            type: Number,
             required: false,
         }]
     },

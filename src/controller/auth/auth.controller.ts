@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { User } from "../models/user.model";
-import userModel from "../models/user.model";
+import { User } from "../../models/user.model";
+import userModel from "../../models/user.model";
 import bcrypt from "bcryptjs";
-import ConfigManager from "../config/configManager";
+import ConfigManager from "../../config/configManager";
 
 const asyncHandler = require("express-async-handler");
 const jwt = require('jsonwebtoken');

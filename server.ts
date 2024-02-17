@@ -40,7 +40,7 @@ app.use(function (req, res, next) {
 app.use("/auth", authRoute);
 app.use("/pokedex", pokedexRoute);
 
-app.get("/ping", (req: Request, res: Response) => {
+app.get("/ping", async (req: Request, res: Response) => {
     res.send("alive!");
 });
 

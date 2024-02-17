@@ -1,5 +1,5 @@
 import express from 'express';
-import { getPokedex, addToPokedex, removeFromPokedex } from '../../controller/pokedex.controller';
+import { getPokedex, addToPokedex, removeFromPokedex } from '../../controller/pokemon/pokedex.controller';
 import verifyToken from "../../middleware/auth.middleware";
 
 const router = express.Router();
