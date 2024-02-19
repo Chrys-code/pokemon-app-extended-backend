@@ -2,8 +2,8 @@ import { SerializedPokemon, serializePokemonFromApi } from "../../utils/serializ
 import { PokeApiPokemon, PokeApiPokemonTypesResponse, PokeApiResponse } from "./pokeApi.types";
 
 
-export const getPokemonsFromExtApi = async () => {
-    const data = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20&offset=0");
+export const getPokemonsFromExtApi = async (limit: string = '20') => {
+    const data = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=0`);
     const res: PokeApiResponse = await data.json();
 
     const promises = res.results.map(async (res: PokeApiPokemon) => {
@@ -22,7 +22,7 @@ export const getPokemonsFromExtApi = async () => {
 }
 
 export const getPokemonTypesFromExtApi = async () => {
-    const data = await fetch("https://pokeapi.co/api/v2/type?limit=20&offset=0");
+    const data = await fetch("https://pokeapi.co/api/v2/type?limit=100&offset=0");
     const res: PokeApiPokemonTypesResponse = await data.json();
 
     return res.results.reduce((prev: string[], current: PokeApiPokemon) => ([

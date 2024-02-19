@@ -6,9 +6,20 @@ const asyncHandler = require("express-async-handler");
 
 export const getPokemons = asyncHandler(async (req: Request, res: Response): Promise<PokemonResponse> => {
 
+    const { limit } = req.query;
+
     try {
 
-        const allPokemons = await getPokemonsFromExtApi();
+        if (typeof limit != "string") {
+            return res.status(412).send({
+                success: false,
+                message: "Wrong limit type",
+                pokemons: [],
+                pokemonTypes: [],
+            })
+        }
+
+        const allPokemons = await getPokemonsFromExtApi(limit);
         const allPokemonTypes = await getPokemonTypesFromExtApi();
 
         return res.status(200).send({
